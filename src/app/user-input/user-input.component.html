@@ -1,0 +1,13 @@
+<form class="example-form">
+  <mat-form-field class="example-full-width" (ngSubmit)="handleSubmit()">
+    <mat-label>JSON</mat-label>
+    <input
+      matInput
+      placeholder="json"
+      value="Sushi"
+      [(ngModel)]="jsonData"
+      [ngModelOptions]="{ standalone: true }"
+    />
+    <button (click)="handleSubmit()">Submit</button>
+  </mat-form-field>
+</form>
