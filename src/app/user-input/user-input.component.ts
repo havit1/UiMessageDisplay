@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InputDataFormatterServiceService } from '../input-data-formatter-service.service';
+import { InputDataFormatterServiceService } from '../shared/input-data-formatter-service.service';
 
 @Component({
   selector: 'app-user-input',
@@ -15,6 +15,7 @@ export class UserInputComponent implements OnInit {
 
   handleSubmit() {
     this._inputDataFormatService.formatJson(JSON.parse(this.jsonData));
+    this.jsonData = '';
   }
 
   ngOnInit(): void {}

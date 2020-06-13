@@ -10,7 +10,6 @@ export class InputDataFormatterServiceService {
   private _JSONSource = new Subject<JSON>();
   JSONSource$ = this._JSONSource.asObservable();
   formatJson(newJson: JSON) {
-    console.log(newJson);
     this._JSONSource.next(newJson);
   }
 }
