@@ -1,9 +1,9 @@
-type Scheduled = 'scheduled';
-type InProgress = 'inProgress';
-type Success = 'success';
-type Error = 'error';
-type Expired = 'expired';
-type Ready = 'ready';
+type Scheduled = 'Scheduled';
+type InProgress = 'InProgress';
+type Success = 'Success';
+type Error = 'Error';
+type Expired = 'Expired';
+type Ready = 'Ready';
 
 type StateType = Scheduled | InProgress | Success | Error | Expired | Ready;
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InputDataFormatterServiceService } from '../shared/input-data-formatter-service.service';
+import { InputDataFormatterService } from '../shared/services/input-data-formatter.service';
 
 @Component({
   selector: 'app-user-input',
@@ -7,9 +7,7 @@ import { InputDataFormatterServiceService } from '../shared/input-data-formatter
   styleUrls: ['./user-input.component.scss'],
 })
 export class UserInputComponent implements OnInit {
-  constructor(
-    private _inputDataFormatService: InputDataFormatterServiceService
-  ) {}
+  constructor(private _inputDataFormatService: InputDataFormatterService) {}
 
   jsonData = '';
 

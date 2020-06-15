@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Dag } from '../shared/dag.model';
+import { Dag } from '../shared/models/dag.model';
 
 @Component({
   selector: 'app-dag',
@@ -9,7 +9,7 @@ import { Dag } from '../shared/dag.model';
 export class DagComponent implements OnInit {
   constructor() {}
 
-  @Input() dag: Array<Dag>;
+  @Input() dag: Dag;
 
   ngOnInit(): void {}
 }
