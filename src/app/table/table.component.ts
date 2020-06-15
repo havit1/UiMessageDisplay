@@ -1,21 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InputDataFormatterServiceService } from '../shared/input-data-formatter-service.service';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-// “batchId, status, active messages, error”
-// type StateType = Scheduled | InProgress | Success | Error | Expired | Ready
-
-// class Dag(batchId: string,
-//   dependencyCount: int,
-//   messages: List[(string, Message)],
-//   children: List[Dag])
-// class Message(messageId: string, state: StateType, message: string, error: string | null)
+import { Dag } from '../shared/dag.model';
 
 @Component({
   selector: 'app-table',
@@ -27,12 +12,36 @@ export class TableComponent implements OnInit {
     private _inputDataFormatterServiceService: InputDataFormatterServiceService
   ) {}
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = [];
+  displayedColumns: string[] = ['batchId', 'status', 'activeMessages', 'error'];
+  dataSource: Array<Dag> = [];
 
   ngOnInit(): void {
-    this._inputDataFormatterServiceService.JSONSource$.subscribe((message) =>
-      console.log(message)
+    this._inputDataFormatterServiceService.JSONSource$.subscribe(
+      (message: Array<Dag>): void => {
+        if (this.dataSource.length > 0) {
+          const newData = getChanges(this.dataSource, message);
+          console.log(newData);
+          this.dataSource = newData || message || [];
+          console.log(this.dataSource);
+        } else {
+          this.dataSource = message;
+        }
+      }
     );
   }
 }
+
+const getChanges = function (oldArray, newArray) {
+  let changes, i, item, j, len;
+  if (JSON.stringify(oldArray) === JSON.stringify(newArray)) {
+    return false;
+  }
+  changes = [];
+  for (i = j = 0, len = newArray.length; j < len; i = ++j) {
+    item = newArray[i];
+    if (JSON.stringify(item) !== JSON.stringify(oldArray[i])) {
+      changes.push(item);
+    }
+  }
+  return changes;
+};

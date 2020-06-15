@@ -10,9 +10,11 @@ import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TableComponent } from './table/table.component';
 import { UserInputComponent } from './user-input/user-input.component';
+import { DagComponent } from './dag/dag.component';
+import { MessageComponent } from './message/message.component';
 
 @NgModule({
-  declarations: [AppComponent, TableComponent, UserInputComponent],
+  declarations: [AppComponent, TableComponent, UserInputComponent, DagComponent, MessageComponent],
   imports: [
     BrowserModule,
     NoopAnimationsModule,

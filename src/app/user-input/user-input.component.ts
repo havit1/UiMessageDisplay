@@ -14,7 +14,7 @@ export class UserInputComponent implements OnInit {
   jsonData = '';
 
   handleSubmit() {
-    this._inputDataFormatService.formatJson(JSON.parse(this.jsonData));
+    this._inputDataFormatService.formatJson(this.jsonData);
     this.jsonData = '';
   }
 
