@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InputDataFormatterService } from '../shared/services/input-data-formatter.service';
+import { GetUpdatesService } from '../shared/services/get-updates.service';
 import { Dag } from '../shared/models/dag.model';
 
 @Component({
@@ -9,7 +10,8 @@ import { Dag } from '../shared/models/dag.model';
 })
 export class TableComponent implements OnInit {
   constructor(
-    private _inputDataFormatterServiceService: InputDataFormatterService
+    private _inputDataFormatterService: InputDataFormatterService,
+    private _getUpdatedDataService: GetUpdatesService
   ) {}
 
   displayedColumns: string[] = ['batchId', 'status', 'activeMessages', 'error'];
@@ -17,10 +19,13 @@ export class TableComponent implements OnInit {
   dataSource: Array<Dag> = [];
 
   ngOnInit(): void {
-    this._inputDataFormatterServiceService.JSONSource$.subscribe(
+    this._inputDataFormatterService.JSONSource$.subscribe(
       (message: Array<Dag>): void => {
         if (this.dataSource.length > 0) {
-          const newData: Array<Dag> = getUpdates(message, this.dataSource);
+          const newData: Array<Dag> = this._getUpdatedDataService.getUpdates(
+            message,
+            this.dataSource
+          );
           this.dataSource = newData;
         } else {
           this.dataSource = message;
@@ -28,16 +33,4 @@ export class TableComponent implements OnInit {
       }
     );
   }
-}
-
-function getUpdates(newState: Array<Dag>, oldState: Array<Dag>): Array<Dag> {
-  let updatedState: Array<Dag> = [];
-  newState.forEach((dag) =>
-    oldState.find((d, i) => {
-      return d.batchId === dag.batchId
-        ? (oldState.splice(i, 1, dag), (updatedState = [...oldState]))
-        : (updatedState = [...newState]);
-    })
-  );
-  return updatedState;
 }

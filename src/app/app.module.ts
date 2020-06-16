@@ -11,8 +11,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
 import { UserInputComponent } from './user-input/user-input.component';
-import { DagComponent } from './dag/dag.component';
-import { MessageComponent } from './message/message.component';
 
 import { StatusColorDirective } from './shared/directives/status-color.directive';
 
@@ -21,8 +19,6 @@ import { StatusColorDirective } from './shared/directives/status-color.directive
     AppComponent,
     TableComponent,
     UserInputComponent,
-    DagComponent,
-    MessageComponent,
     StatusColorDirective,
   ],
   imports: [

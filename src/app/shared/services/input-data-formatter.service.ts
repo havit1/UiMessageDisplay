@@ -20,21 +20,8 @@ export class InputDataFormatterService {
 
   JSONSource$ = this._JSONSource.asObservable();
 
-  buildActiveMessage(dag: Dag) {
-    let messages = [];
-    dag.messages.forEach(
-      (message) =>
-        message[1].state !== Scheduled &&
-        message[1].state !== Success &&
-        messages.push(Object.keys(message[1].message)[0])
-    );
-    let messagesString = messages.join(', ');
-    return messagesString;
-  }
-
   getStatus(dag: Dag) {
     let status = '';
-    console.log(dag);
     const messagesState = dag.messages.map((d) => d[1].state);
     if (messagesState.includes(Error)) status = Error;
     else if (
@@ -62,6 +49,18 @@ export class InputDataFormatterService {
     return status;
   }
 
+  buildActiveMessage(dag: Dag) {
+    let messages = [];
+    dag.messages.forEach(
+      (message) =>
+        message[1].state !== Scheduled &&
+        message[1].state !== Success &&
+        messages.push(Object.keys(message[1].message)[0])
+    );
+    let messagesString = messages.join(', ');
+    return messagesString;
+  }
+
   getErrors(dag: Dag): string {
     let error = [];
 
@@ -73,13 +72,17 @@ export class InputDataFormatterService {
     return error[0];
   }
 
+  getState(dag: Dag) {
+    dag.messages.forEach(
+      (message: Message) =>
+        message && (message[1].state = Object.keys(message[1].state)[0])
+    );
+  }
+
   formatJson(newJson: string) {
     const data = JSON.parse(newJson);
     data.forEach((element: Dag) => {
-      element.messages.forEach(
-        (message: Message) =>
-          message && (message[1].state = Object.keys(message[1].state)[0])
-      );
+      this.getState(element);
       element.status = this.getStatus(element);
       element.activeMessages = this.buildActiveMessage(element);
       element.error = this.getErrors(element);

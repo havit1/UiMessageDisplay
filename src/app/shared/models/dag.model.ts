@@ -1,4 +1,4 @@
-import { Message } from './message.model';
+import { Message, Scheduled, Success } from './message.model';
 
 export class Dag {
   constructor(
