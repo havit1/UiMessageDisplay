@@ -4,10 +4,10 @@ export class Dag {
   constructor(
     public batchId: string,
     public dependencyCount: number,
-    public messages: Array<Message>,
+    public messages: Array<Message | string>,
     public children?: Array<Dag>,
     public status?: string,
     public activeMessages?: string,
-    public error?: string
+    public errorMessage?: string
   ) {}
 }

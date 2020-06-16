@@ -9,6 +9,7 @@ import {
   Scheduled,
   Success,
   Message,
+  StateType,
 } from '../models/message.model';
 
 @Injectable({
@@ -20,74 +21,83 @@ export class InputDataFormatterService {
 
   JSONSource$ = this._JSONSource.asObservable();
 
-  getStatus(dag: Dag) {
-    let status = '';
-    const messagesState = dag.messages.map((d) => d[1].state);
-    if (messagesState.includes(Error)) status = Error;
-    else if (
-      messagesState.includes(InProgress) ||
-      messagesState.includes(Ready)
-    )
-      status = InProgress;
-    else if (messagesState.includes(Expired)) status = Expired;
-    else if (
-      messagesState.includes(Scheduled) &&
-      !messagesState.includes(Error) &&
-      !messagesState.includes(Expired) &&
-      !messagesState.includes(Success) &&
-      !messagesState.includes(InProgress) &&
-      !messagesState.includes(Ready)
-    ) {
-      status = Scheduled;
-    } else if (
-      messagesState.includes(Success) &&
-      !messagesState.includes(Error) &&
-      !messagesState.includes(Expired) &&
-      !messagesState.includes(Scheduled) &&
-      !messagesState.includes(InProgress) &&
-      !messagesState.includes(Ready)
-    )
-      status = Success;
-    return status;
+  getMessageState(message: Message) {
+    let state: StateType = Object.keys(message.state)[0] as StateType;
+    return state;
   }
 
-  buildActiveMessage(dag: Dag) {
+  getMessageStatus(messagesState: Map<StateType, ''>) {
+    if (messagesState.has(Error)) return Error;
+    else if (messagesState.has(InProgress) || messagesState.has(Ready))
+      return InProgress;
+    else if (messagesState.has(Expired)) return Expired;
+    else if (
+      messagesState.has(Scheduled) &&
+      !messagesState.has(Error) &&
+      !messagesState.has(Expired) &&
+      !messagesState.has(Success) &&
+      !messagesState.has(InProgress) &&
+      !messagesState.has(Ready)
+    ) {
+      return Scheduled;
+    } else if (
+      messagesState.has(Success) &&
+      !messagesState.has(Error) &&
+      !messagesState.has(Expired) &&
+      !messagesState.has(Scheduled) &&
+      !messagesState.has(InProgress) &&
+      !messagesState.has(Ready)
+    )
+      return Success;
+  }
+
+  buildActiveMessage(message: Message) {
     let messages = [];
-    dag.messages.forEach(
-      (message) =>
-        message[1].state !== Scheduled &&
-        message[1].state !== Success &&
-        messages.push(Object.keys(message[1].message)[0])
-    );
+    message.state !== Scheduled &&
+      message.state !== Success &&
+      messages.push(Object.keys(message.message));
+
     let messagesString = messages.join(', ');
     return messagesString;
   }
 
-  getErrors(dag: Dag): string {
-    let error = [];
-
-    dag.messages.forEach((d) => {
-      d[1].error
-        ? error.push(`${Object.keys(d[1].message)[0]} : ${d[1].error}`)
-        : null;
-    });
-    return error[0];
+  getMessageErrors(message: Message): string {
+    return message.error
+      ? `${Object.keys(message.message)[0]} : ${message.error}`
+      : null;
   }
 
-  getState(dag: Dag) {
-    dag.messages.forEach(
-      (message: Message) =>
-        message && (message[1].state = Object.keys(message[1].state)[0])
-    );
+  formatMessages(dag: Dag) {
+    const messagesErrors = [];
+    const activeMessages = [];
+    let status = '';
+    const messagesState = new Map();
+    dag.messages.forEach((message) => {
+      let state = this.getMessageState(message[1]);
+      messagesState.set(state, '');
+    });
+
+    dag.messages.forEach((message) => {
+      const messageInfo = message[1];
+      messageInfo.state = this.getMessageState(messageInfo);
+
+      const error = this.getMessageErrors(messageInfo);
+      error && messagesErrors.push(error);
+
+      status = this.getMessageStatus(messagesState);
+
+      const activeMessage = this.buildActiveMessage(messageInfo);
+      !!activeMessage && activeMessages.push(activeMessage);
+    });
+    dag.status = status;
+    dag.activeMessages = activeMessages.join(', ');
+    dag.errorMessage = messagesErrors[0];
   }
 
   formatJson(newJson: string) {
     const data = JSON.parse(newJson);
     data.forEach((element: Dag) => {
-      this.getState(element);
-      element.status = this.getStatus(element);
-      element.activeMessages = this.buildActiveMessage(element);
-      element.error = this.getErrors(element);
+      this.formatMessages(element);
     });
     this._JSONSource.next(data);
   }

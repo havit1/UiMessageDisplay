@@ -11,11 +11,11 @@ export class GetUpdatesService {
     let updatedState: Array<Dag> = [];
     newState.forEach((dag) =>
       oldState.find((d, i) => {
-        return d.batchId === dag.batchId
-          ? (oldState.splice(i, 1, dag), (updatedState = [...oldState]))
-          : (updatedState = [...newState]);
+        d.batchId == dag.batchId &&
+          (oldState.splice(i, 1, dag), (updatedState = [...oldState]));
       })
     );
+    updatedState.length === 0 && (updatedState = [...newState]);
     return updatedState;
   }
 }

@@ -35,7 +35,7 @@
 
   <ng-container matColumnDef="error">
     <th mat-header-cell *matHeaderCellDef>error</th>
-    <td mat-cell *matCellDef="let dag">{{ dag.error }}</td>
+    <td mat-cell *matCellDef="let dag">{{ dag.errorMessage }}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
