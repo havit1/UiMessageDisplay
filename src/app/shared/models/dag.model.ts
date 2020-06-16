@@ -1,4 +1,4 @@
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Message } from './message.model';
 
 export class Dag {
   constructor(
@@ -6,6 +6,8 @@ export class Dag {
     public dependencyCount: number,
     public messages: Array<Message>,
     public children?: Array<Dag>,
-    public status?: string
+    public status?: string,
+    public activeMessages?: string,
+    public error?: string
   ) {}
 }

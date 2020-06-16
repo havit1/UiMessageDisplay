@@ -1,11 +1,24 @@
-type Scheduled = 'Scheduled';
-type InProgress = 'InProgress';
-type Success = 'Success';
-type Error = 'Error';
-type Expired = 'Expired';
-type Ready = 'Ready';
+export type TScheduled = 'Scheduled';
+export type TInProgress = 'InProgress';
+export type TSuccess = 'Success';
+export type TError = 'Error';
+export type TExpired = 'Expired';
+export type TReady = 'Ready';
 
-type StateType = Scheduled | InProgress | Success | Error | Expired | Ready;
+export const Scheduled = 'Scheduled';
+export const InProgress = 'InProgress';
+export const Success = 'Success';
+export const Error = 'Error';
+export const Expired = 'Expired';
+export const Ready = 'Ready';
+
+export type StateType =
+  | TScheduled
+  | TInProgress
+  | TSuccess
+  | TError
+  | TExpired
+  | TReady;
 
 export class Message {
   constructor(
