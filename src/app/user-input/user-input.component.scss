@@ -5,4 +5,13 @@
   &__input {
     width: 60%;
   }
+
+  &__button {
+    outline: none;
+    border: none;
+    background-color: grey;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+  }
 }

@@ -12,15 +12,8 @@ import { AppComponent } from './app.component';
 import { TableComponent } from './table/table.component';
 import { UserInputComponent } from './user-input/user-input.component';
 
-import { StatusColorDirective } from './shared/directives/status-color.directive';
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    TableComponent,
-    UserInputComponent,
-    StatusColorDirective,
-  ],
+  declarations: [AppComponent, TableComponent, UserInputComponent],
   imports: [
     BrowserModule,
     NoopAnimationsModule,

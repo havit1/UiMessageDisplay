@@ -9,7 +9,11 @@
       [ngModelOptions]="{ standalone: true }"
     >
     </textarea>
-    <button (click)="handleSubmit()" [disabled]="disableButton()">
+    <button
+      (click)="handleSubmit()"
+      [disabled]="disableButton()"
+      class="form__button"
+    >
       Submit
     </button>
   </mat-form-field>

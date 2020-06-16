@@ -12,7 +12,7 @@ export class UserInputComponent implements OnInit {
   jsonData = '';
 
   disableButton() {
-    return this.jsonData.length === 0 ? true : false;
+    return this.jsonData.trim().length === 0 ? true : false;
   }
 
   handleSubmit() {
