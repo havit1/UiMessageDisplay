@@ -1,13 +1,16 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width" (ngSubmit)="handleSubmit()">
+<form class="form">
+  <mat-form-field class="form__input" (ngSubmit)="handleSubmit()">
     <mat-label>JSON</mat-label>
-    <input
+    <textarea
       matInput
       placeholder="json"
       [value]="jsonData"
       [(ngModel)]="jsonData"
       [ngModelOptions]="{ standalone: true }"
-    />
-    <button (click)="handleSubmit()">Submit</button>
+    >
+    </textarea>
+    <button (click)="handleSubmit()" [disabled]="disableButton()">
+      Submit
+    </button>
   </mat-form-field>
 </form>

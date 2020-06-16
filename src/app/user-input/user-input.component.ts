@@ -11,6 +11,10 @@ export class UserInputComponent implements OnInit {
 
   jsonData = '';
 
+  disableButton() {
+    return this.jsonData.length === 0 ? true : false;
+  }
+
   handleSubmit() {
     this._inputDataFormatService.formatJson(this.jsonData);
     this.jsonData = '';
