@@ -35,7 +35,8 @@ export class InputDataFormatterService {
       !messagesState.includes(Error) &&
       !messagesState.includes(Expired) &&
       !messagesState.includes(Success) &&
-      !messagesState.includes(InProgress)
+      !messagesState.includes(InProgress) &&
+      !messagesState.includes(Ready)
     ) {
       status = Scheduled;
     } else if (
@@ -43,7 +44,8 @@ export class InputDataFormatterService {
       !messagesState.includes(Error) &&
       !messagesState.includes(Expired) &&
       !messagesState.includes(Scheduled) &&
-      !messagesState.includes(InProgress)
+      !messagesState.includes(InProgress) &&
+      !messagesState.includes(Ready)
     )
       status = Success;
     return status;
