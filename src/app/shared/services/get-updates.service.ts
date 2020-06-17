@@ -8,7 +8,6 @@ export class GetUpdatesService {
   constructor() {}
 
   getUpdates(newState: Array<Dag>, oldState: Array<Dag>): Array<Dag> {
-    const time1 = performance.now();
     let updatedState: Array<Dag> = [];
     newState.forEach((dag) =>
       oldState.find((d, i) => {

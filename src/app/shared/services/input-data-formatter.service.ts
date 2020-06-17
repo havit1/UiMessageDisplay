@@ -21,12 +21,70 @@ export class InputDataFormatterService {
 
   JSONSource$ = this._JSONSource.asObservable();
 
+  formatJson(newJson: string) {
+    const data = JSON.parse(newJson);
+    data.forEach((element: Dag) => {
+      this.formatMessages(element);
+    });
+    this._JSONSource.next(data);
+  }
+
+  formatMessages(dag: Dag) {
+    const messagesErrors = [];
+    const activeMessages = [];
+    let status = '';
+    const messagesState = new Map();
+
+    this.formatDagAndItsChildren(
+      dag,
+      messagesState,
+      messagesErrors,
+      activeMessages
+    );
+
+    status = this.getDagStatus(messagesState);
+
+    dag.status = status;
+    dag.activeMessages = activeMessages.join(', ');
+    dag.errorMessage = messagesErrors[0];
+  }
+
+  formatDagAndItsChildren(
+    dag: Dag,
+    messagesState: Map<StateType, ''>,
+    messagesErrors: String[],
+    activeMessages: String[]
+  ) {
+    dag.messages.forEach((message) => {
+      const messageInfo = message[1];
+
+      let state = this.getMessageState(messageInfo);
+      messagesState.set(state, '');
+      messageInfo.state = state;
+
+      const error = this.getMessageErrors(messageInfo);
+      error && messagesErrors.push(error);
+
+      const activeMessage = this.getActiveMessages(messageInfo);
+      !!activeMessage && activeMessages.push(activeMessage);
+    });
+    if (dag.children.length > 0)
+      dag.children.forEach((c) =>
+        this.formatDagAndItsChildren(
+          c,
+          messagesState,
+          messagesErrors,
+          activeMessages
+        )
+      );
+  }
+
   getMessageState(message: Message) {
     let state: StateType = Object.keys(message.state)[0] as StateType;
     return state;
   }
 
-  getMessageStatus(messagesState: Map<StateType, ''>) {
+  getDagStatus(messagesState: Map<StateType, ''>) {
     if (messagesState.has(Error)) return Error;
     else if (messagesState.has(InProgress) || messagesState.has(Ready))
       return InProgress;
@@ -51,7 +109,7 @@ export class InputDataFormatterService {
       return Success;
   }
 
-  buildActiveMessage(message: Message) {
+  getActiveMessages(message: Message) {
     let messages = [];
     message.state !== Scheduled &&
       message.state !== Success &&
@@ -65,40 +123,5 @@ export class InputDataFormatterService {
     return message.error
       ? `${Object.keys(message.message)[0]} : ${message.error}`
       : null;
-  }
-
-  formatMessages(dag: Dag) {
-    const messagesErrors = [];
-    const activeMessages = [];
-    let status = '';
-    const messagesState = new Map();
-    dag.messages.forEach((message) => {
-      let state = this.getMessageState(message[1]);
-      messagesState.set(state, '');
-    });
-
-    dag.messages.forEach((message) => {
-      const messageInfo = message[1];
-      messageInfo.state = this.getMessageState(messageInfo);
-
-      const error = this.getMessageErrors(messageInfo);
-      error && messagesErrors.push(error);
-
-      status = this.getMessageStatus(messagesState);
-
-      const activeMessage = this.buildActiveMessage(messageInfo);
-      !!activeMessage && activeMessages.push(activeMessage);
-    });
-    dag.status = status;
-    dag.activeMessages = activeMessages.join(', ');
-    dag.errorMessage = messagesErrors[0];
-  }
-
-  formatJson(newJson: string) {
-    const data = JSON.parse(newJson);
-    data.forEach((element: Dag) => {
-      this.formatMessages(element);
-    });
-    this._JSONSource.next(data);
   }
 }
