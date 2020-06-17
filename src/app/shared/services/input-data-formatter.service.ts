@@ -32,8 +32,8 @@ export class InputDataFormatterService {
   formatMessages(dag: Dag) {
     const messagesErrors = [];
     const activeMessages = [];
-    let status = '';
     const messagesState = new Map();
+    let status = '';
 
     this.formatDagAndItsChildren(
       dag,
@@ -68,10 +68,11 @@ export class InputDataFormatterService {
       const activeMessage = this.getActiveMessages(messageInfo);
       !!activeMessage && activeMessages.push(activeMessage);
     });
+
     if (dag.children.length > 0)
-      dag.children.forEach((c) =>
+      dag.children.forEach((child) =>
         this.formatDagAndItsChildren(
-          c,
+          child,
           messagesState,
           messagesErrors,
           activeMessages
